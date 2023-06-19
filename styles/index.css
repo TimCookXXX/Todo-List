@@ -116,6 +116,64 @@ body {
     pointer-events: none
 }
 
+.uncompleted-list {
+    overflow: auto;
+    max-height: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+  } 
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #833ab4;
+    border-radius: 10px;
+  }
+
+  
+
+.completed-list {
+    overflow: auto;
+    max-height: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+}
+
+.clear-button {
+	display: inline-block;	
+	box-sizing: border-box;
+	padding: 0 20px;
+	outline: none;
+	border: none;  
+	border-radius: 4px;
+	height: 32px;
+	line-height: 32px;
+	font-size: 14px;
+	font-weight: 500;
+	text-decoration: none;
+	color: #fff;
+	background-color: #3775dd;
+	box-shadow: 0 2px #21487f;
+	cursor: pointer;
+	user-select: none;
+	appearance: none;
+	touch-action: manipulation;  
+	vertical-align: top;
+}
+.clear-button:hover {
+	background-color: #002fed;
+}
+.clear-button:active {
+	background-color: #2f599e !important;
+}
+.clear-button:focus-visible {
+	box-shadow: 0 0 0 3px lightskyblue;
+}
+
 .completed-todos .todo-item {
     background-color: #74c674;
     text-decoration: line-through;
@@ -125,5 +183,10 @@ body {
     font-size: 20px;
     margin-top: 30px;
     margin-bottom: 10px;
+}
+
+.uncompleted-title {
+    font-size: 20px;
+    margin-bottom: 10px; 
 }
 

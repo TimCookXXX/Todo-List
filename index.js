@@ -3,6 +3,12 @@ let todoItems = []
 const todoInput = document.querySelector('.todo-input')
 const completedTodosDiv = document.querySelector('.completed-todos')
 const uncompletedTodosDiv = document.querySelector('.uncompleted-todos')
+const completedDivInfo = document.createElement('div')
+const uncompletedDivInfo = document.createElement('div')
+const completedTitle = document.createElement('div')
+const uncompletedTitle = document.createElement('div')
+const completedList = document.createElement('div')
+const uncompletedList = document.createElement('div')
 const audio = new Audio('./assets/audio.mp3')
 
 // Получить список задач при первой загрузке
@@ -46,6 +52,16 @@ function addTodo(text) {
     saveAndRender()
 }
 
+function removeAllCompletedTasks() {
+    todoItems = todoItems.filter((todo) => !todo.completed)
+    saveAndRender()
+}
+
+function removeAllUnCompletedTasks() {
+    todoItems = todoItems.filter((todo) => todo.completed)
+    saveAndRender()
+}
+
 // Удалить задачу
 function removeTodo(id) {
     todoItems = todoItems.filter((todo) => todo.id !== Number(id))
@@ -85,6 +101,20 @@ function save() {
     localStorage.setItem('todoItems', JSON.stringify(todoItems))
 }
 
+const clearButtonCompleted = document.createElement('button')
+clearButtonCompleted.className = 'clear-button'
+clearButtonCompleted.innerHTML = 'Удалить завершённые задачи'
+clearButtonCompleted.onclick = () => {
+    removeAllCompletedTasks()
+}
+
+const clearButtonUncompleted = document.createElement('button')
+clearButtonUncompleted.className = 'clear-button'
+clearButtonUncompleted.innerHTML = 'Удалить активные задачи'
+clearButtonUncompleted.onclick = () => {
+    removeAllUnCompletedTasks()
+}
+
 // Показывать
 function render() {
     let unCompletedTodos = todoItems.filter((item) => !item.completed)
@@ -92,21 +122,38 @@ function render() {
 
     completedTodosDiv.innerHTML = ''
     uncompletedTodosDiv.innerHTML = ''
+    uncompletedList.innerHTML = ''
+    completedList.innerHTML = ''
 
     if (unCompletedTodos.length > 0) {
+        uncompletedDivInfo.className = 'uncompleted-info'
+        uncompletedTodosDiv.append(uncompletedDivInfo)
+        uncompletedTitle.className = 'uncompleted-title'
+        uncompletedTitle.innerHTML = `Активные задачи (${unCompletedTodos.length})`
+        uncompletedList.className = 'uncompleted-list'
+        uncompletedTodosDiv.append(uncompletedList)
+        uncompletedDivInfo.append(uncompletedTitle)
         unCompletedTodos.forEach((todo) => {
-            uncompletedTodosDiv.append(createTodoElement(todo))
+            uncompletedDivInfo.append(clearButtonUncompleted)
+            uncompletedList.append(createTodoElement(todo))
         })
     } else {
         uncompletedTodosDiv.innerHTML = `<div class="empty">Нет активных задач, добавьте новую задачу.</div>`
     }
 
     if (completedTodos.length > 0) {
-        completedTodosDiv.innerHTML = `<div class="completed-title">Завершённые задачи (${completedTodos.length}/${todoItems.length})</div>`
+        completedDivInfo.className = 'completed-info'
+        completedList.className = 'completed-list'
+        completedTodosDiv.append(completedDivInfo)
+        completedTodosDiv.append(completedList)
+        completedTitle.className = 'completed-title'
+        completedTitle.innerHTML =  `Завершённые задачи (${completedTodos.length}/${todoItems.length})`
+        completedDivInfo.appendChild(completedTitle)
     }
 
     completedTodos.forEach((todo) => {
-        completedTodosDiv.append(createTodoElement(todo))
+        completedDivInfo.append(clearButtonCompleted)
+        completedList.append(createTodoElement(todo))
     })
 }
 
@@ -148,6 +195,6 @@ function createTodoElement(todo) {
     todoTextSpan.prepend(todoInputCheckbox)
     todoDiv.appendChild(todoTextSpan)
     todoDiv.appendChild(todoRemoveBtn)
-
+    
     return todoDiv
 }
